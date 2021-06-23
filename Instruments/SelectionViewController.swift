@@ -29,10 +29,22 @@ class SelectionViewController: UITableViewController {
 			for item in tempItems {
 				if item.range(of: "Large") != nil {
 					items.append(item)
-					makeThumb(currentImage: item)
 				}
 			}
 		}
+
+		for item in items {
+			if let name = item.components(separatedBy: "-").first {
+				if let image = loadThumbnail(name: name) {
+					thumbs.append(image)
+				} else {
+					let thumb = makeThumb(currentImage: item)
+					save(thumb, name: name)
+					thumbs.append(thumb)
+				}
+			}
+		}
+
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
