@@ -44,20 +44,25 @@ class SelectionViewController: UITableViewController {
 		}
 	}
 
-	func makeThumb(currentImage: String) {
-		let imageRootName = currentImage.replacingOccurrences(of: "Large", with: "Thumb")
-		guard let path = Bundle.main.path(forResource: imageRootName, ofType: nil),
-					let original = UIImage(contentsOfFile: path) else { return }
+	func makeThumb(currentImage: String) -> UIImage {
+		let imageName = currentImage.replacingOccurrences(of: "Large", with: "Thumb")
+		guard let path = Bundle.main.path(forResource: imageName, ofType: nil),
+					let original = UIImage(contentsOfFile: path) else {
+			fatalError("Fatal Error: Unable to load image '\(imageName)'")
+		}
 
 		let renderRect = CGRect(origin: .zero, size: CGSize(width: 90, height: 90))
 		let renderer = UIGraphicsImageRenderer(size: renderRect.size)
 
-		let rounded = renderer.image { ctx in
+		let thumb = renderer.image { ctx in
 			ctx.cgContext.addEllipse(in: renderRect)
 			ctx.cgContext.clip()
 
 			original.draw(in: renderRect)
 		}
+		return thumb
+	}
+
 	func save(_ image: UIImage, name: String) {
 		let imagePath = getDocumentsDirectory().appendingPathComponent(name).appendingPathExtension("jpg")
 		if let imageData = image.jpegData(compressionQuality: 0.8) {
@@ -65,7 +70,6 @@ class SelectionViewController: UITableViewController {
 		}
 	}
 
-		thumbs.append(rounded)
 	func loadThumbnail(name: String) -> UIImage? {
 		let imagePath = getDocumentsDirectory().appendingPathComponent(name).appendingPathExtension("jpg")
 		return UIImage(contentsOfFile: imagePath.path)
