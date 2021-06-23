@@ -60,6 +60,9 @@ class SelectionViewController: UITableViewController {
 		}
 
 		thumbs.append(rounded)
+	func getDocumentsDirectory() -> URL {
+		let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+		return paths[0]
 	}
 
 	// MARK: - Table view data source
