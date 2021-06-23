@@ -67,6 +67,9 @@ class SelectionViewController: UITableViewController {
 		let renderer = UIGraphicsImageRenderer(size: original.size)
 
 		let rounded = renderer.image { ctx in
+			ctx.cgContext.setShadow(offset: .zero, blur: 200, color: UIColor.black.cgColor)
+			ctx.cgContext.fillEllipse(in: CGRect(origin: .zero, size: original.size))
+			ctx.cgContext.setShadow(offset: .zero, blur: 0, color: nil)
 			ctx.cgContext.addEllipse(in: CGRect(origin: CGPoint.zero, size: original.size))
 			ctx.cgContext.clip()
 
@@ -74,12 +77,6 @@ class SelectionViewController: UITableViewController {
 		}
 
 		cell.imageView?.image = rounded
-
-		// give the images a nice shadow to make them look a bit more dramatic
-		cell.imageView?.layer.shadowColor = UIColor.black.cgColor
-		cell.imageView?.layer.shadowOpacity = 1
-		cell.imageView?.layer.shadowRadius = 10
-		cell.imageView?.layer.shadowOffset = CGSize.zero
 
 		// each image stores how often it's been tapped
 		let defaults = UserDefaults.standard
