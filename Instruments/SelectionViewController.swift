@@ -10,6 +10,7 @@ import UIKit
 
 class SelectionViewController: UITableViewController {
 	var items = [String]() // this is the array that will store the filenames to load
+	var thumbs = [UIImage]() // this is the array to strore the generted thumbnails
 	var dirty = false
 
 	override func viewDidLoad() {
@@ -28,6 +29,7 @@ class SelectionViewController: UITableViewController {
 			for item in tempItems {
 				if item.range(of: "Large") != nil {
 					items.append(item)
+					makeThumb(currentImage: item)
 				}
 			}
 		}
@@ -40,6 +42,24 @@ class SelectionViewController: UITableViewController {
 			// we've been marked as needing a counter reload, so reload the whole table
 			tableView.reloadData()
 		}
+	}
+
+	func makeThumb(currentImage: String) {
+		let imageRootName = currentImage.replacingOccurrences(of: "Large", with: "Thumb")
+		guard let path = Bundle.main.path(forResource: imageRootName, ofType: nil),
+					let original = UIImage(contentsOfFile: path) else { return }
+
+		let renderRect = CGRect(origin: .zero, size: CGSize(width: 90, height: 90))
+		let renderer = UIGraphicsImageRenderer(size: renderRect.size)
+
+		let rounded = renderer.image { ctx in
+			ctx.cgContext.addEllipse(in: renderRect)
+			ctx.cgContext.clip()
+
+			original.draw(in: renderRect)
+		}
+
+		thumbs.append(rounded)
 	}
 
 	// MARK: - Table view data source
@@ -60,21 +80,9 @@ class SelectionViewController: UITableViewController {
 
 		// find the image for this cell, and load its thumbnail
 		let currentImage = items[indexPath.row % items.count]
-		let imageRootName = currentImage.replacingOccurrences(of: "Large", with: "Thumb")
-		guard let path = Bundle.main.path(forResource: imageRootName, ofType: nil),
-					let original = UIImage(contentsOfFile: path) else { return cell }
-
+		let thumb = thumbs[indexPath.row % thumbs.count]
 		let renderRect = CGRect(origin: .zero, size: CGSize(width: 90, height: 90))
-		let renderer = UIGraphicsImageRenderer(size: renderRect.size)
-
-		let rounded = renderer.image { ctx in
-			ctx.cgContext.addEllipse(in: renderRect)
-			ctx.cgContext.clip()
-
-			original.draw(in: renderRect)
-		}
-
-		cell.imageView?.image = rounded
+		cell.imageView?.image = thumb
 
 		// give the images a nice shadow to make them look a bit more dramatic
 		cell.imageView?.layer.shadowColor = UIColor.black.cgColor
