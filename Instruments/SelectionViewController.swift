@@ -13,8 +13,8 @@ class SelectionViewController: UITableViewController {
 	var viewControllers = [UIViewController]() // create a cache of the detail view controllers for faster loading
 	var dirty = false
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+	override func viewDidLoad() {
+		super.viewDidLoad()
 
 		title = "Reactionist"
 
@@ -31,7 +31,7 @@ class SelectionViewController: UITableViewController {
 				}
 			}
 		}
-    }
+	}
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -42,21 +42,24 @@ class SelectionViewController: UITableViewController {
 		}
 	}
 
-    // MARK: - Table view data source
+	// MARK: - Table view data source
 
 	override func numberOfSections(in tableView: UITableView) -> Int {
-        // Return the number of sections.
-        return 1
-    }
+		// Return the number of sections.
+		return 1
+	}
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // Return the number of rows in the section.
-        return items.count * 10
-    }
+	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		// Return the number of rows in the section.
+		return items.count * 10
+	}
 
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
+	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		var cell: UITableViewCell! = tableView.dequeueReusableCell(withIdentifier: "Cell")
+		if cell == nil {
+			cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
+		}
 
 		// find the image for this cell, and load its thumbnail
 		let currentImage = items[indexPath.row % items.count]
@@ -65,7 +68,7 @@ class SelectionViewController: UITableViewController {
 		let original = UIImage(contentsOfFile: path)!
 
 		let renderRect = CGRect(origin: .zero, size: CGSize(width: 90, height: 90))
-			let renderer = UIGraphicsImageRenderer(size: renderRect.size)
+		let renderer = UIGraphicsImageRenderer(size: renderRect.size)
 
 		let rounded = renderer.image { ctx in
 			ctx.cgContext.addEllipse(in: renderRect)
@@ -88,7 +91,7 @@ class SelectionViewController: UITableViewController {
 		cell.textLabel?.text = "\(defaults.integer(forKey: currentImage))"
 
 		return cell
-    }
+	}
 
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		let vc = ImageViewController()
