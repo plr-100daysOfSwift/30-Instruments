@@ -45,11 +45,12 @@ class ImageViewController: UIViewController {
 		}
 	}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+	override func viewDidLoad() {
+		super.viewDidLoad()
 
 		title = image.replacingOccurrences(of: "-Large.jpg", with: "")
-		let original = UIImage(named: image)!
+		let path = Bundle.main.path(forResource: image, ofType: nil)!
+		let original = UIImage(contentsOfFile: path)!
 
 		let renderer = UIGraphicsImageRenderer(size: original.size)
 
@@ -61,7 +62,7 @@ class ImageViewController: UIViewController {
 		}
 
 		imageView.image = rounded
-    }
+	}
 
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
