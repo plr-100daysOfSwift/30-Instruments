@@ -66,6 +66,11 @@ class SelectionViewController: UITableViewController {
 	}
 
 		thumbs.append(rounded)
+	func loadThumbnail(name: String) -> UIImage? {
+		let imagePath = getDocumentsDirectory().appendingPathComponent(name).appendingPathExtension("jpg")
+		return UIImage(contentsOfFile: imagePath.path)
+	}
+
 	func getDocumentsDirectory() -> URL {
 		let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
 		return paths[0]
