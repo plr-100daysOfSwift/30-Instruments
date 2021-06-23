@@ -76,14 +76,14 @@ class SelectionViewController: UITableViewController {
 	}
 
 	func save(_ image: UIImage, name: String) {
-		let imagePath = getDocumentsDirectory().appendingPathComponent(name).appendingPathExtension("jpg")
-		if let imageData = image.jpegData(compressionQuality: 0.8) {
+		let imagePath = getDocumentsDirectory().appendingPathComponent(name).appendingPathExtension("png")
+		if let imageData = image.pngData() {
 			try? imageData.write(to: imagePath)
 		}
 	}
 
 	func loadThumbnail(name: String) -> UIImage? {
-		let imagePath = getDocumentsDirectory().appendingPathComponent(name).appendingPathExtension("jpg")
+		let imagePath = getDocumentsDirectory().appendingPathComponent(name).appendingPathExtension("png")
 		return UIImage(contentsOfFile: imagePath.path)
 	}
 
