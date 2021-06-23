@@ -18,4 +18,4 @@ func getDocumentsDirectory() -> URL {
 		return paths[0]
 }
 ```
-[1]: https://www.hackingwithswift.com/100/98
+[1]: https://www.hackingwithswift.com/100/97
