@@ -58,6 +58,12 @@ class SelectionViewController: UITableViewController {
 
 			original.draw(in: renderRect)
 		}
+	func save(_ image: UIImage, name: String) {
+		let imagePath = getDocumentsDirectory().appendingPathComponent(name).appendingPathExtension("jpg")
+		if let imageData = image.jpegData(compressionQuality: 0.8) {
+			try? imageData.write(to: imagePath)
+		}
+	}
 
 		thumbs.append(rounded)
 	func getDocumentsDirectory() -> URL {
